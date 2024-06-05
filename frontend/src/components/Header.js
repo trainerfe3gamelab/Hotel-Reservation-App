@@ -1,7 +1,7 @@
 import React from "react";
 
 const Header = () => {
-    const user = true;
+    const user = false;
 
     const isAdmin = false;
 
@@ -25,7 +25,7 @@ const Header = () => {
                 </a>
             ) : (
                 <a
-                    to="/api/auth/login"
+                    href="/api/auth/login"
                     className="btn btn-light rounded-pill text-primary fw-bold me-2"
                 >
                     Sign In
