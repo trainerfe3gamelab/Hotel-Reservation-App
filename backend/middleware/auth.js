@@ -1,22 +1,18 @@
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+import jwt from "jsonwebtoken";
 
-// Initialize dotenv to use .env variables
-dotenv.config();
+const verifyToken = (req, res, next) => {
+  const token = req.cookies["auth_token"];
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
-const auth = (req, res, next) => {
-    const token = req.cookies["auth_token"];
-    if (!token) {
-        return res.status(401).json({ message: "unauthorized" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.userId = decoded.userId;
-        next();
-    } catch (error) {
-        return res.status(401).json({ message: "unauthorized" });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    req.id = decoded.id; // Directly assigning the userId to the request object
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 };
 
-module.exports = auth;
+export default verifyToken;

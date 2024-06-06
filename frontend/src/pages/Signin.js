@@ -5,15 +5,9 @@ import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
 
-/**
- * @typedef {Object} SignInFormData
- * @property {string} email
- * @property {string} password
- */
-
 export const SignInFormData = {
-  email: "",
-  password: "",
+  email: String,
+  password: String,
 };
 
 export const SignIn = () => {
@@ -23,7 +17,7 @@ export const SignIn = () => {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm();
+  } = useForm(SignInFormData);
 
   const mutation = useMutation(apiClient.SignIn, {
     onSuccess: async () => {
@@ -46,7 +40,7 @@ export const SignIn = () => {
   });
 
   return (
-    <form className="d-flex flex-column gap-2" onSubmit={onSubmit}>
+    <form className="d-flex flex-column gap-2 p-5 m-3" onSubmit={onSubmit}>
       <h2 className="fw-bold fs-3 mt-4">Sign In</h2>
 
       <div className="mb-3">

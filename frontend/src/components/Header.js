@@ -1,11 +1,9 @@
 import React from "react";
+import { useAppContext } from "../contexts/AppContext";
+import SignOutButton from "./SignOutButton";
 
 const Header = () => {
-    const user = false;
-
-    const isAdmin = false;
-
-    const isSuperAdmin = false;
+    const { isLoggedIn } = useAppContext();
   return (
     
     <div className="bg-primary py-3">
@@ -16,16 +14,11 @@ const Header = () => {
           </a>
         </span>
         <span className="d-flex align-items-center">
-            {user ? (
-                <a
-                    href="/api/auth/logout"
-                    className="btn btn-light rounded-pill text-primary fw-bold me-2"
-                >
-                    Sign Out
-                </a>
+            {isLoggedIn ? (
+                <SignOutButton />
             ) : (
                 <a
-                    href="/api/auth/login"
+                    href="/login"
                     className="btn btn-light rounded-pill text-primary fw-bold me-2"
                 >
                     Sign In

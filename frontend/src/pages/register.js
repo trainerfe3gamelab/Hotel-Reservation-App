@@ -1,4 +1,8 @@
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import * as apiClient from "../api-client";
+import { useAppContext } from "../contexts/AppContext";
+import { useNavigate } from "react-router-dom";
 
 /**
  * @typedef {Object} RegisterFormData
@@ -10,49 +14,57 @@ import { useForm } from "react-hook-form";
  */
 
 export const RegisterFormData = {
-  firstName: "",
-  lastName: "",
+  fullName: "",
   email: "",
   password: "",
   confirmPassword: "",
 };
 
 const Register = () => {
+  const navigate = useNavigate();
+  const { showToast } = useAppContext();
+
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm(RegisterFormData);
+
+  const mutation = useMutation(apiClient.register, {
+    onSuccess: async () => {
+      showToast({
+        message: "User created successfully",
+        type: "SUCCESS",
+      });
+      navigate("/");
+    },
+    onError: (error) => {
+      showToast({
+        message: error.message,
+        type: "ERROR",
+      });
+    },
+  });
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    mutation.mutate(data);
   });
 
   return (
     <form className="container mt-5" onSubmit={onSubmit}>
       <h2 className="text-center mb-4">Create an Account</h2>
-      <div className="row mb-3">
-        <div className="col">
-          <label className="form-label">First Name</label>
-          <input
-            className="form-control"
-            {...register("firstName", { required: "This field is required" })}
-          />
-          {errors.firstName && (
-            <p className="text-danger">{errors.firstName.message}</p>
-          )}
-        </div>
-        <div className="col">
-          <label className="form-label">Last Name</label>
-          <input
-            className="form-control"
-            {...register("lastName", { required: "This field is required" })}
-          />
-          {errors.lastName && (
-            <p className="text-danger">{errors.lastName.message}</p>
-          )}
-        </div>
+
+      <div className="mb-3">
+        <label className="form-label">Full Name</label>
+        <input
+          type="text"
+          className="form-control"
+          {...register("fullName", { required: "This field is required" })}
+        />
+        {errors.fullName && (
+          <p className="text-danger">{errors.fullName.message}</p>
+        )}
       </div>
       <div className="mb-3">
         <label className="form-label">Email</label>
@@ -61,9 +73,7 @@ const Register = () => {
           className="form-control"
           {...register("email", { required: "This field is required" })}
         />
-        {errors.email && (
-          <p className="text-danger">{errors.email.message}</p>
-        )}
+        {errors.email && <p className="text-danger">{errors.email.message}</p>}
       </div>
       <div className="mb-3">
         <label className="form-label">Password</label>
@@ -101,10 +111,7 @@ const Register = () => {
           <p className="text-danger">{errors.confirmPassword.message}</p>
         )}
       </div>
-      <button
-        type="submit"
-        className="btn btn-primary btn-lg"
-      >
+      <button type="submit" className="btn btn-primary btn-lg">
         Create Account
       </button>
     </form>

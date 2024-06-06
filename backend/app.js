@@ -1,41 +1,43 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const mysql = require('mysql');
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import mysql from "mysql";
+import authRoutes from "./routes/Auth.js";
+import userRoutes from "./routes/users.js";
+import cookieParser from "cookie-parser";
 
 // Initialize dotenv to use .env variables
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  })
+);
 
 const db = mysql.createConnection({
-    host: process.env.DATABASE_HOST,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PASSWORD,
-    database: process.env.DATABASE
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE,
 });
 
-app.get("/users", (req, res) => {
-    db.query("SELECT * FROM users", (err, result) => {
-        if (err) {
-            console.log(err);
-        } else {
-            res.send(result);
-        }
-    });
+db.connect((err) => {
+  if (err) {
+    console.error('Error connecting to the database:', err);
+  } else {
+    console.log('Connected to the MySQL database.');
+  }
 });
 
-// Middleware to parse cookies
-app.use(cookieParser());
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
-
-// Start server
-const PORT = process.env.PORT || 7000;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.listen(7000, () => {
+  console.log("Server started on port 7000");
 });

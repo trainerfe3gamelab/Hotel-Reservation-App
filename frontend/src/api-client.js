@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = process.env.REACT_APP_API;
 
 export const register = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/api/users/register`, {
