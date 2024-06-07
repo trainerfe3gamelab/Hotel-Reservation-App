@@ -41,7 +41,7 @@ router.post(
           .json({ message: "Invalid Credentials for Password" });
       }
 
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY, {
+      const token = jwt.sign({ userId: user.userId }, process.env.JWT_SECRET_KEY, {
         expiresIn: "1d",
       });
 

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ export const RegisterFormData = {
 const Register = () => {
   const navigate = useNavigate();
   const { showToast } = useAppContext();
-
+  const queryClient = useQueryClient();
   const {
     register,
     watch,
@@ -37,6 +37,7 @@ const Register = () => {
         message: "User created successfully",
         type: "SUCCESS",
       });
+      await queryClient.invalidateQueries("validateToken");
       navigate("/");
     },
     onError: (error) => {
@@ -111,9 +112,18 @@ const Register = () => {
           <p className="text-danger">{errors.confirmPassword.message}</p>
         )}
       </div>
+      <span className="d-flex items-center justify-content-between">
+      <span>
+          Already have an account?{" "}
+          <a href="/login" className="text-primary">
+            Login here
+          </a>
+        </span>
+        
       <button type="submit" className="btn btn-primary btn-lg">
         Create Account
       </button>
+      </span>
     </form>
   );
 };
