@@ -1,48 +1,60 @@
-import { HotelFormData } from "./ManageHotelForm";
-import { hotelTypes } from "../../config/hotel-option-config";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { hotelTypes } from "../../config/hotel-option-config";
+import { HotelFormData } from "./ManageHotelForm";
+import "./css/TypeSection.css"; // Import custom CSS for additional styling if needed
 
 const TypeSection = () => {
-    const {
-      register,
-      watch,
-      formState: { errors },
-    } = useFormContext(HotelFormData);
-  
-    const typeWatch = watch("type");
-  
-    return (
-      <div>
-        <h2 className="text-2xl font-bold mb-3">Type</h2>
-        <div className="grid grid-cols-5 gap-2">
-          {hotelTypes.map((type, index) => (
-            <label
-              key={index} // Adding a unique key prop
-              className={
-                typeWatch === type
-                  ? "cursor-pointer bg-blue-300 text-sm rounded-full px-4 py-2 font-semibold"
-                  : "cursor-pointer bg-gray-300 text-sm rounded-full px-4 py-2 font-semibold"
-              }
+  const {
+    register,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext(HotelFormData);
+
+  const [selectedType, setSelectedType] = useState(watch("type"));
+
+  const handleSelect = (type) => {
+    setSelectedType(type);
+    setValue("type", type);
+  };
+
+  return (
+    <div className="d-flex flex-column w-100 align-items-center mb-3">
+      <h2 className="mb-3">Type</h2>
+      <div className="button-grid w-75">
+        {hotelTypes.map((type, index) => (
+          <ButtonGroup key={index} className="button-grid-item">
+            <Button
+              variant={selectedType === type ? "primary" : "secondary"}
+              className="w-100 text-sm rounded font-semibold"
+              onClick={() => handleSelect(type)}
             >
-              <input
+              <Form.Check
                 type="radio"
                 value={type}
                 {...register("type", {
                   required: "This field is required",
                 })}
-                className="hidden"
+                className="d-none"
+                checked={selectedType === type}
+                onChange={() => handleSelect(type)}
               />
-              <span>{type}</span>
-            </label>
-          ))}
-        </div>
-        {errors.type && (
-          <span className="text-red-500 text-sm font-bold">
-            {errors.type.message}
-          </span>
-        )}
+              {type}
+            </Button>
+          </ButtonGroup>
+        ))}
       </div>
-    );
-  };
+      {errors.type && (
+        <div className="text-danger font-weight-bold mt-2">
+          {errors.type.message}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default TypeSection;

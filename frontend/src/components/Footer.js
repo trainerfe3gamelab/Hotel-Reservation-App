@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-primary py-5 position-fixed bottom-0 w-100">
+    <div className="bg-primary py-5 abs w-100">
       <div className="container">
         <div className="row">
           <div className="col-md-6">

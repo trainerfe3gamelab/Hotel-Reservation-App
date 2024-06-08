@@ -8,114 +8,81 @@ const DetailsSection = () => {
   } = useFormContext(HotelFormData);
 
   return (
-    <div className="container">
-      <h1 className="text-3xl font-bold">Add Hotel</h1>
+    <div className="container mt-5">
+      <h1 className="text-center mb-3">Add Hotel</h1>
 
-      <div className="row">
-        <div className="col-md-6">
-          <label className="form-label">
-            Name
-            <input
-              type="text"
-              className={`form-control ${errors.name && "is-invalid"}`}
-              {...register("name", { required: "This field is required" })}
-            />
-            {errors.name && (
-              <div className="invalid-feedback">{errors.name.message}</div>
-            )}
-          </label>
+      <div className="mb-3">
+        <label className="form-label">Name</label>
+        <input
+          type="text"
+          className="form-control"
+          {...register("name", { required: "This field is required" })}
+        />
+        {errors.name && <p className="text-danger">{errors.name.message}</p>}
+      </div>
+      <div className="d-flex gap-3">
+        <div className="mb-3 w-100">
+          <label className="form-label">City</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register("city", { required: "This field is required" })}
+          />
+          {errors.city && <p className="text-danger">{errors.city.message}</p>}
         </div>
-        <div className="col-md-6">
-          <label className="form-label">
-            City
-            <input
-              type="text"
-              className={`form-control ${errors.city && "is-invalid"}`}
-              {...register("city", { required: "This field is required" })}
-            />
-            {errors.city && (
-              <div className="invalid-feedback">{errors.city.message}</div>
-            )}
-          </label>
+        <div className="mb-3 w-100">
+          <label className="form-label">Country</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register("country", { required: "This field is required" })}
+          />
+          {errors.country && (
+            <p className="text-danger">{errors.country.message}</p>
+          )}
         </div>
       </div>
-
-      <div className="row">
-        <div className="col-md-6">
-          <label className="form-label">
-            Country
-            <input
-              type="text"
-              className={`form-control ${errors.country && "is-invalid"}`}
-              {...register("country", { required: "This field is required" })}
-            />
-            {errors.country && (
-              <div className="invalid-feedback">{errors.country.message}</div>
-            )}
-          </label>
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">
-            Price Per Night
-            <input
-              type="number"
-              min="0"
-              step="0.01"
-              className={`form-control ${errors.pricePerNight && "is-invalid"}`}
-              {...register("pricePerNight", {
-                required: "This field is required",
-              })}
-            />
-            {errors.pricePerNight && (
-              <div className="invalid-feedback">
-                {errors.pricePerNight.message}
-              </div>
-            )}
-          </label>
-        </div>
+      <div className="mb-3">
+        <label className="form-label">Description</label>
+        <input
+          type="text"
+          className="form-control"
+          {...register("description", { required: "This field is required" })}
+        />
+        {errors.description && (
+          <p className="text-danger">{errors.description.message}</p>
+        )}
       </div>
-
-      <div className="row">
-        <div className="col-md-6">
-          <label className="form-label">
-            Description
-            <textarea
-              rows={5}
-              className={`form-control ${errors.description && "is-invalid"}`}
-              {...register("description", {
-                required: "This field is required",
-              })}
-            />
-            {errors.description && (
-              <div className="invalid-feedback">
-                {errors.description.message}
-              </div>
-            )}
-          </label>
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">
-            Star Rating
-            <select
-              className={`form-control ${errors.starRating && "is-invalid"}`}
-              {...register("starRating", {
-                required: "This field is required",
-              })}
-            >
-              <option value="">Select Star Rating</option>
-              {[1, 2, 3, 4, 5].map((num, index) => (
-                <option key={index} value={num}>
-                  {num}
-                </option>
-              ))}
-            </select>
-            {errors.starRating && (
-              <div className="invalid-feedback">
-                {errors.starRating.message}
-              </div>
-            )}
-          </label>
-        </div>
+      <div className="mb-3">
+        <label className="form-label">Price per Night</label>
+        <input
+          type="number"
+          max={1}
+          className="form-control"
+          {...register("pricePerNight", { required: "This field is required" })}
+        />
+        {errors.pricePerNight && (
+          <p className="text-danger">{errors.pricePerNight.message}</p>
+        )}
+      </div>
+      <div className="mb-3">
+        <label className="form-label">Star Rating</label>
+        <select
+          {...register("starRating", { required: "This field is required" })}
+          className="form-select"
+        >
+          <option value="" className="text-muted">
+            Select Star Rating
+          </option>
+          {[1, 2, 3, 4, 5].map((rating) => (
+            <option key={rating} value={rating}>
+              {rating}
+            </option>
+          ))}
+        </select>
+        {errors.starRating && (
+          <p className="text-danger">{errors.starRating.message}</p>
+        )}
       </div>
     </div>
   );
