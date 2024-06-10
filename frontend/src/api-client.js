@@ -1,3 +1,5 @@
+import { HotelFormData } from "./forms/ManageHotelForms/ManageHotelForm";
+
 const API_BASE_URL = process.env.REACT_APP_API;
 
 export const register = async (formData) => {
@@ -54,4 +56,18 @@ export const signOut = async () => {
   if (!response.ok) {
     throw new Error("Unable to sign out");
   }
+};
+
+export const addMyHotel = async (formData = HotelFormData) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
+    method: "POST",
+    credentials: "include",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add hotel");
+  }
+
+  return response.json();
 };

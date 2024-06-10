@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { hotelTypes } from "../../config/hotel-option-config";
 import { HotelFormData } from "./ManageHotelForm";
-import "./css/TypeSection.css"; // Import custom CSS for additional styling if needed
+import "./css/TypeSection.css"; 
 
 const TypeSection = () => {
   const {

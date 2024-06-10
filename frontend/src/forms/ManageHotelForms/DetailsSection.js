@@ -44,8 +44,8 @@ const DetailsSection = () => {
       </div>
       <div className="mb-3">
         <label className="form-label">Description</label>
-        <input
-          type="text"
+        <textarea
+          rows={10}
           className="form-control"
           {...register("description", { required: "This field is required" })}
         />
@@ -57,7 +57,7 @@ const DetailsSection = () => {
         <label className="form-label">Price per Night</label>
         <input
           type="number"
-          max={1}
+          min={1}
           className="form-control"
           {...register("pricePerNight", { required: "This field is required" })}
         />

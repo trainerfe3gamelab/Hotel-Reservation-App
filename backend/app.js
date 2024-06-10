@@ -5,9 +5,16 @@ import mysql from "mysql";
 import authRoutes from "./routes/Auth.js";
 import userRoutes from "./routes/users.js";
 import cookieParser from "cookie-parser";
+import myHotelsRoutes from "./routes/my-hotels.js";
+import { v2 as cloudinary} from "cloudinary";
 
-// Initialize dotenv to use .env variables
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const app = express();
 app.use(express.json());
@@ -37,6 +44,7 @@ db.connect((err) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/my-hotels", myHotelsRoutes);
 
 app.listen(7000, () => {
   console.log("Server started on port 7000");
