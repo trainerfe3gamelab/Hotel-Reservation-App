@@ -7,10 +7,25 @@ const AppContext = React.createContext(undefined);
 
 export const AppContextProvider = ({ children }) => {
   const [toast, setToast] = useState(undefined);
+  const [isAdmin, setIsAdmin] = useState(false); // Menambahkan state isAdmin
 
-  const { isError } = useQuery("validateToken", apiClient.validateToken, {
+  const { isError, data } = useQuery("validateToken", apiClient.validateToken, {
     retry: false,
   });
+
+  // Memeriksa apakah pengguna adalah admin dan mengatur state isAdmin
+  React.useEffect(() => {
+    if (!isError && data && data.email) {
+      const { email } = data;
+      const isAdminUser = checkAdminStatusByEmail(email); // Fungsi untuk memeriksa status admin berdasarkan email
+      setIsAdmin(isAdminUser);
+    }
+  }, [isError, data]);
+
+  const checkAdminStatusByEmail = (email) => {
+
+    return email === process.env.REACT_APP_ADMIN_EMAIL;
+  };
 
   return (
     <AppContext.Provider
@@ -19,6 +34,7 @@ export const AppContextProvider = ({ children }) => {
           setToast(toastMessage);
         },
         isLoggedIn: !isError,
+        isAdmin: isAdmin, // Menyertakan isAdmin dalam value context
       }}
     >
       {toast && (

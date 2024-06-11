@@ -10,9 +10,11 @@ import Register from "./pages/Register";
 import SignIn from "./pages/Signin";
 import { useAppContext } from "./contexts/AppContext";
 import AddHotel from "./pages/AddHotel";
+import MyHotels from "./pages/MyHotels";
+import EditHotel from "./pages/EditHotel";
 
 function App() {
-  const { isLoggedIn } = useAppContext();
+  const { isLoggedIn, isAdmin } = useAppContext(); // Mengambil status isLoggedIn dan isAdmin dari context
   return (
     <Router>
       <Routes>
@@ -48,13 +50,29 @@ function App() {
             </Layout>
           }
         />
-        {isLoggedIn && (
+        {isLoggedIn &&  (
           <>
             <Route
               path="/add-hotel"
               element={
                 <Layout>
                   <AddHotel />
+                </Layout>
+              }
+            />
+            <Route
+              path="/my-hotels"
+              element={
+                <Layout>
+                  <MyHotels />
+                </Layout>
+              }
+            />
+            <Route
+              path="/edit-hotel/:hotelId"
+              element={
+                <Layout>
+                  <EditHotel />
                 </Layout>
               }
             />

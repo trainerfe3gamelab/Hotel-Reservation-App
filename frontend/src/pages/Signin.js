@@ -42,47 +42,54 @@ export const SignIn = () => {
   });
 
   return (
-    <form className="d-flex flex-column gap-2 p-5 m-3" onSubmit={onSubmit}>
-      <h2 className="fw-bold fs-3 mt-4">Sign In</h2>
+    <div className="container">
+      <form
+        className="d-flex flex-column gap-2 py-5 m-3 w-100"
+        onSubmit={onSubmit}
+      >
+        <h2 className="fw-bold fs-3 mt-4">Sign In</h2>
 
-      <div className="mb-3">
-        <label className="form-label">Email</label>
-        <input
-          type="email"
-          className="form-control"
-          {...register("email", { required: "This field is required" })}
-        />
-        {errors.email && <p className="text-danger">{errors.email.message}</p>}
-      </div>
-      <div className="mb-3">
-        <label className="form-label">Password</label>
-        <input
-          type="password"
-          className="form-control"
-          {...register("password", {
-            required: "This field is required",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters",
-            },
-          })}
-        />
-        {errors.password && (
-          <p className="text-danger">{errors.password.message}</p>
-        )}
-      </div>
-      <span className="d-flex align-items-center justify-content-between">
-        <span>
-          Not registered yet?{" "}
-          <a href="/register" className="text-primary">
-            Create an account
-          </a>
+        <div className="mb-3">
+          <label className="form-label">Email</label>
+          <input
+            type="email"
+            className="form-control"
+            {...register("email", { required: "This field is required" })}
+          />
+          {errors.email && (
+            <p className="text-danger">{errors.email.message}</p>
+          )}
+        </div>
+        <div className="mb-3">
+          <label className="form-label">Password</label>
+          <input
+            type="password"
+            className="form-control"
+            {...register("password", {
+              required: "This field is required",
+              minLength: {
+                value: 6,
+                message: "Password must be at least 6 characters",
+              },
+            })}
+          />
+          {errors.password && (
+            <p className="text-danger">{errors.password.message}</p>
+          )}
+        </div>
+        <span className="d-flex align-items-center justify-content-between">
+          <span>
+            Not registered yet?{" "}
+            <a href="/register" className="text-primary">
+              Create an account
+            </a>
+          </span>
+          <button type="submit" className="btn btn-primary btn-lg">
+            Login
+          </button>
         </span>
-        <button type="submit" className="btn btn-primary btn-lg">
-          Login
-        </button>
-      </span>
-    </form>
+      </form>
+    </div>
   );
 };
 

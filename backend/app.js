@@ -43,7 +43,7 @@ db.connect((err) => {
 });
 
 app.use("/api/auth", authRoutes);
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
 
 app.listen(7000, () => {

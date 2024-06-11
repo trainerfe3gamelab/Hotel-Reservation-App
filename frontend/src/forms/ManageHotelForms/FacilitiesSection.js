@@ -10,9 +10,10 @@ const FacilitiesSection = () => {
   } = useFormContext();
 
   return (
-    <div className="d-flex flex-column w-100 align-items-center mb-3">
-      <h2 className="mb-3">Facilities</h2>
-      <div className="d-flex justify-content-center w-100">
+    <div className="container mt-5">
+    <div className="d-flex flex-column mb-3">
+      <h2 className="mb-3 align-self-center">Facilities</h2>
+      <div className="d-flex w-100 justify-content-between">
         {hotelFacilities.map((facility, index) => (
           <Form.Group className="me-3 mb-3" key={index} controlId={`facility-${facility}`}>
             <Form.Check
@@ -39,6 +40,7 @@ const FacilitiesSection = () => {
         </div>
       )}
     </div>
+  </div>
   );
 };
 

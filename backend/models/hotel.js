@@ -42,13 +42,17 @@ const Hotel = sequelize.define('Hotel', {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    starRating: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
     adultCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
     },
     childrenCount: {
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
     },
     facilities: {
         type: DataTypes.JSON, 
