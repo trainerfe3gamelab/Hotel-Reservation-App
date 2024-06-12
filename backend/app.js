@@ -7,6 +7,7 @@ import userRoutes from "./routes/users.js";
 import cookieParser from "cookie-parser";
 import myHotelsRoutes from "./routes/my-hotels.js";
 import { v2 as cloudinary} from "cloudinary";
+import hotelRoutes from "./routes/hotels.js";
 
 dotenv.config();
 
@@ -45,6 +46,7 @@ db.connect((err) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
+app.use("/api/hotels", hotelRoutes);
 
 app.listen(7000, () => {
   console.log("Server started on port 7000");

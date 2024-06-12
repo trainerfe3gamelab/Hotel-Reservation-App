@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { AppContextProvider } from './contexts/AppContext';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { AppContextProvider } from "./contexts/AppContext";
+import { SearchContextProvider } from "./contexts/SearchContext";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,12 +15,14 @@ const queryClient = new QueryClient({
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <AppContextProvider>
-        <App />
+        <SearchContextProvider>
+          <App />
+        </SearchContextProvider>
       </AppContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
