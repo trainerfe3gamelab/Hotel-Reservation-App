@@ -27,7 +27,6 @@ async function uploadImages(imageFiles) {
   return imageUrls;
 }
 
-// Route untuk menambah hotel baru
 router.post(
   "/",
   verifyToken,
@@ -151,5 +150,6 @@ router.put(
     }
   }
 );
+
 
 export default router;

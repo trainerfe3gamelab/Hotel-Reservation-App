@@ -233,3 +233,38 @@ export const fetchMyBookings = async () => {
 
   return response.json();
 };
+
+export const rateHotel = async (hotelId, rating) => {
+  const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/rating`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ rating }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Error rating hotel");
+  }
+}
+
+const checkResponse = async (response) => {
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Server error');
+  }
+  return response.json();
+};
+
+export const fetchHotelAverageRating = async (hotelId) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/ratingAvg`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch average ratings');
+    }
+    return await response.json();
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

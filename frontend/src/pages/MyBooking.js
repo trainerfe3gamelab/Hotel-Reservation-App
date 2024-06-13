@@ -1,13 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import * as apiClient from '../api-client';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
 const MyBookings = () => {
-  const { data: hotels, isLoading, isError } = useQuery(
+  const { data: hotels, isLoading, isError, refetch } = useQuery(
     'fetchMyBookings',
     apiClient.fetchMyBookings
   );
+
+  const [ratingInput, setRatingInput] = useState({});
+  const [ratingError, setRatingError] = useState({});
+  const [filledRatingStatus, setFilledRatingStatus] = useState({});
+
+  useEffect(() => {
+    // Initialize ratingInput with the user's existing ratings from the bookings data
+    if (hotels) {
+      const initialRatings = {};
+      const initialFilledStatus = {};
+      hotels.forEach(hotel => {
+        hotel.bookings.forEach(booking => {
+          if (booking.rating) {
+            initialRatings[booking.hotelId] = booking.rating;
+            initialFilledStatus[booking.hotelId] = true;
+          } else {
+            initialFilledStatus[booking.hotelId] = false;
+          }
+        });
+      });
+      setRatingInput(initialRatings);
+      setFilledRatingStatus(initialFilledStatus);
+    }
+  }, [hotels]);
+
+  const handleRatingChange = (hotelId, rating) => {
+    setRatingInput({ ...ratingInput, [hotelId]: rating });
+  };
+
+  const handleRateHotel = async (hotelId) => {
+    try {
+      if (!ratingInput[hotelId]) {
+        setRatingError({ ...ratingError, [hotelId]: 'Please provide a rating' });
+        return;
+      }
+
+      await apiClient.rateHotel(hotelId, ratingInput[hotelId]);
+      setRatingInput({ ...ratingInput, [hotelId]: undefined }); // Clear rating input
+      setRatingError({ ...ratingError, [hotelId]: '' });
+      await refetch();
+    } catch (error) {
+      setRatingError({ ...ratingError, [hotelId]: error.message });
+    }
+  };
 
   if (isLoading) {
     return <span>Loading...</span>;
@@ -41,7 +85,7 @@ const MyBookings = () => {
             <div className="overflow-auto mb-3" style={{ maxHeight: '200px' }}>
               {hotel.bookings && hotel.bookings.length ? (
                 hotel.bookings.map((booking, idx) => (
-                  <div key={idx} className="mb-2">
+                  <div key={idx} className="mb-3">
                     <div className="mb-1">
                       <strong>Dates:</strong>{' '}
                       <span>
@@ -55,15 +99,51 @@ const MyBookings = () => {
                       </span>
                     </div>
                     <div className="mt-2">
-                      <strong>Rating:</strong>{' '}
-                      <span className="d-flex">
-                        {[...Array(5)].map((_, starIndex) => (
-                          starIndex < booking.rating
-                            ? <AiFillStar key={starIndex} className="text-warning" />
-                            : <AiOutlineStar key={starIndex} className="text-muted" />
-                        ))}
-                      </span>
+                      <strong>Your Rating:</strong>{' '}
+                      {filledRatingStatus[booking.hotelId] ? (
+                        <span>
+                          <span className="d-flex" style={{ outline: 'none' }}>
+                            {[...Array(5)].map((_, starIndex) => (
+                              <span
+                                key={starIndex}
+                                disabled 
+                              >
+                                {starIndex < ratingInput[booking.hotelId] ? (
+                                  <AiFillStar className="text-warning" />
+                                ) : (
+                                  <AiOutlineStar className="text-muted" />
+                                )}
+                              </span>
+                            ))}
+                          </span>
+                          <p className="mt-2">Thanks for rating our hotel!</p>
+                        </span>
+                      ) : (
+                        <span className="d-flex">
+                          {[...Array(5)].map((_, starIndex) => (
+                            <button
+                              key={starIndex}
+                              className="btn btn-sm p-0"
+                              onClick={() => handleRatingChange(booking.hotelId, starIndex + 1)}
+                            >
+                              {starIndex < (ratingInput[booking.hotelId] || 0) ? (
+                                <AiFillStar className="text-warning" />
+                              ) : (
+                                <AiOutlineStar className="text-muted" />
+                              )}
+                            </button>
+                          ))}
+                        </span>
+                      )}
                     </div>
+                    {!filledRatingStatus[booking.hotelId] && (
+                      <div className="mt-2">
+                        <button className="btn btn-primary btn-sm" onClick={() => handleRateHotel(booking.hotelId)}>
+                          Rate Hotel
+                        </button>
+                        {ratingError[booking.hotelId] && <span className="text-danger ml-2">{ratingError[booking.hotelId]}</span>}
+                      </div>
+                    )}
                   </div>
                 ))
               ) : (

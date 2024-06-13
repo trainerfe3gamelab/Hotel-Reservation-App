@@ -11,6 +11,10 @@ const Booking = sequelize.define("Booking", {
   adultCount: { type: DataTypes.INTEGER, allowNull: false },
   childrenCount: { type: DataTypes.INTEGER, allowNull: false },
   checkIn: { type: DataTypes.DATE, allowNull: false },
+  rating: {
+    type: DataTypes.FLOAT, 
+    allowNull: true
+  },
   checkOut: { type: DataTypes.DATE, allowNull: false },
   userId: { type: DataTypes.STRING, allowNull: false },
   totalCost: { type: DataTypes.FLOAT, allowNull: false },
@@ -23,7 +27,6 @@ const Hotel = sequelize.define("Hotel", {
     allowNull: false,
     defaultValue: DataTypes.UUIDV4,
   },
-  
   userId: { type: DataTypes.STRING, allowNull: false },
   name: { type: DataTypes.STRING, allowNull: false },
   city: { type: DataTypes.STRING, allowNull: false },
@@ -32,6 +35,7 @@ const Hotel = sequelize.define("Hotel", {
   type: { type: DataTypes.STRING, allowNull: false },
   adultCount: { type: DataTypes.INTEGER, allowNull: false },
   childrenCount: { type: DataTypes.INTEGER, allowNull: false },
+  ratingSum: { type: DataTypes.FLOAT, allowNull: true },
   facilities: { type: DataTypes.JSON, allowNull: false },
   pricePerNight: { type: DataTypes.INTEGER, allowNull: false },
   starRating: { type: DataTypes.INTEGER, allowNull: false },

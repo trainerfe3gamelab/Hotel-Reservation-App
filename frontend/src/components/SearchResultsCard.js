@@ -1,19 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { AiFillStar } from "react-icons/ai";
+import * as apiClient from "../api-client";
 
 const SearchResultsCard = ({ hotel }) => {
-  // Ensure hotel object exists and has necessary fields
+  const [averageRating, setAverageRating] = useState(null);
+  const [numUsers, setNumUsers] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (hotel) {
+      const fetchAverageRating = async () => {
+        try {
+          const response = await apiClient.fetchHotelAverageRating(hotel.hotelId);
+          setAverageRating(response.avgRating);
+          setNumUsers(response.numUsers); 
+        } catch (error) {
+          setError(error.message);
+        }
+      };
+
+      fetchAverageRating();
+    }
+  }, [hotel]);
+
+  const formatRating = (avgRating, numUsers) => {
+    if (avgRating === null || typeof avgRating === "undefined") {
+      return "Rating: No Ratings yet";
+    } else if (error) {
+      return "Rating: Failed to fetch rating";
+    } else {
+      const ratingValue = avgRating.toFixed(1);
+      return `Rating: ${ratingValue} ★ (${numUsers})`;
+    }
+  };
+
   if (!hotel) {
     return <div className="alert alert-danger">Hotel data not found.</div>;
   }
 
-  // Parse imageUrls if it's a JSON string, or use as-is if it's already an array
   const imageUrlsArray = Array.isArray(hotel.imageUrls)
     ? hotel.imageUrls
-    : JSON.parse(hotel.imageUrls || '[]'); // Default to empty array if parsing fails
+    : JSON.parse(hotel.imageUrls || '[]');
 
-  // Ensure imageUrls array exists and has at least one image URL
   const imageUrl = imageUrlsArray.length > 0 ? imageUrlsArray[0] : 'https://via.placeholder.com/250x250?text=No+Image';
 
   return (
@@ -48,6 +77,11 @@ const SearchResultsCard = ({ hotel }) => {
           <p className="text-muted text-truncate-3">{hotel.description || 'No description available'}</p>
         </div>
 
+        <div className="d-flex align-items-center mb-2">
+          <span className="text-muted">{hotel.city},</span>
+          <span className="text-muted ms-2">{hotel.country}</span>
+        </div>
+
         <div className="d-flex justify-content-between align-items-end">
           <div className="d-flex flex-wrap gap-2">
             {Array.isArray(hotel.facilities) &&
@@ -66,6 +100,9 @@ const SearchResultsCard = ({ hotel }) => {
             <span className="fw-bold d-block">
               ${hotel.pricePerNight || 'Price not available'} per night
             </span>
+            <p className="card-text">
+              {formatRating(averageRating, numUsers)}
+            </p>
             <Link
               to={`/detail/${hotel.hotelId}`}
               className="btn btn-primary mt-2"
