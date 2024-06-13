@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { hotelTypes } from "../../config/hotel-option-config";
-import { HotelFormData } from "../../shared/type.js";
 import "./css/TypeSection.css";
 
 const TypeSection = () => {
@@ -13,14 +12,26 @@ const TypeSection = () => {
     setValue,
     watch,
     formState: { errors },
-  } = useFormContext(HotelFormData);
+  } = useFormContext();
 
-  const [selectedType, setSelectedType] = useState(watch("type"));
+  // Watch the current type from form context
+  const watchedType = watch("type");
 
+  // Initialize selectedType state with the initial value from watch("type")
+  const [selectedType, setSelectedType] = useState(watchedType);
+
+  // Update selectedType and form field value on selection
   const handleSelect = (type) => {
     setSelectedType(type);
     setValue("type", type);
   };
+
+  // Update selectedType if watchedType changes (e.g., when hotel data updates)
+  useEffect(() => {
+    if (watchedType !== selectedType) {
+      setSelectedType(watchedType);
+    }
+  }, [watchedType, selectedType]);
 
   return (
     <div className="container mt-5">

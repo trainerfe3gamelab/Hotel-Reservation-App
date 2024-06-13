@@ -15,7 +15,11 @@ const Toast = ({ message, type, onClose }) => {
   const bgClass = type === "SUCCESS" ? "bg-success" : "bg-danger";
 
   return (
-    <ToastContainer position="top-end" className="p-3">
+    <ToastContainer
+      position="top-end"
+      className="p-3"
+      style={{ position: "fixed", top: "20px", right: "20px", zIndex: 9999 }}
+    >
       <BootstrapToast
         onClose={onClose}
         delay={5000}

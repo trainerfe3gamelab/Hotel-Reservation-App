@@ -1,87 +1,57 @@
-import { Sequelize, DataTypes } from 'sequelize';
+import { Sequelize, DataTypes } from "sequelize";
 
-
-const sequelize = new Sequelize('capstone', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
+const sequelize = new Sequelize("capstone", "root", "", {
+  host: "localhost",
+  dialect: "mysql",
 });
 
-
-const Hotel = sequelize.define('Hotel', {
-    hotelId: {
-        type: DataTypes.UUID,
-        primaryKey: true,
-        allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
-    },
-    userId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: 'Users',
-            key: 'userId',
-        },
-    },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    city: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    country: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    type: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    starRating: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    adultCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    childrenCount: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    facilities: {
-        type: DataTypes.JSON, 
-        allowNull: false,
-    },
-    pricePerNight: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-    },
-    imageUrls: {
-        type: DataTypes.JSON, 
-        allowNull: false,
-    },
-    lastUpdated: {
-        type: DataTypes.DATE,
-        defaultValue: Sequelize.NOW,
-    },
-}, {
-    timestamps: true, 
-    tableName: 'Hotels' 
+const Booking = sequelize.define("Booking", {
+  fullName: { type: DataTypes.STRING, allowNull: false },
+  email: { type: DataTypes.STRING, allowNull: false },
+  adultCount: { type: DataTypes.INTEGER, allowNull: false },
+  childrenCount: { type: DataTypes.INTEGER, allowNull: false },
+  checkIn: { type: DataTypes.DATE, allowNull: false },
+  checkOut: { type: DataTypes.DATE, allowNull: false },
+  userId: { type: DataTypes.STRING, allowNull: false },
+  totalCost: { type: DataTypes.FLOAT, allowNull: false },
 });
 
+const Hotel = sequelize.define("Hotel", {
+  hotelId: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    allowNull: false,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  
+  userId: { type: DataTypes.STRING, allowNull: false },
+  name: { type: DataTypes.STRING, allowNull: false },
+  city: { type: DataTypes.STRING, allowNull: false },
+  country: { type: DataTypes.STRING, allowNull: false },
+  description: { type: DataTypes.TEXT, allowNull: false },
+  type: { type: DataTypes.STRING, allowNull: false },
+  adultCount: { type: DataTypes.INTEGER, allowNull: false },
+  childrenCount: { type: DataTypes.INTEGER, allowNull: false },
+  facilities: { type: DataTypes.JSON, allowNull: false },
+  pricePerNight: { type: DataTypes.INTEGER, allowNull: false },
+  starRating: { type: DataTypes.INTEGER, allowNull: false },
+  imageUrls: { type: DataTypes.JSON, allowNull: false },
+  lastUpdated: { type: DataTypes.DATE, defaultValue: Sequelize.NOW },
+});
 
-sequelize.sync()
-    .then(() => {
-        console.log('Hotel table created successfully!');
-    })
-    .catch(err => {
-        console.error('Error creating Hotel table:', err);
-    });
+Hotel.hasMany(Booking, {
+  foreignKey: 'hotelId', 
+  as: 'Bookings' 
+});
+Booking.belongsTo(Hotel, { foreignKey: "hotelId" });
 
-export default Hotel;
+sequelize
+  .sync()
+  .then(() => {
+    console.log("All models were synchronized successfully.");
+  })
+  .catch((err) => {
+    console.error("Unable to synchronize models:", err);
+  });
+
+export { Hotel, Booking };

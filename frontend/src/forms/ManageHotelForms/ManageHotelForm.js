@@ -29,7 +29,12 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }) => {
     if (hotel) {
       const normalizedHotelData = {
         ...hotel,
-        facilities: Array.isArray(hotel.facilities) ? hotel.facilities : [],
+        facilities: Array.isArray(hotel.facilities)
+          ? hotel.facilities
+          : JSON.parse(hotel.facilities || "[]"), // Parse JSON string or default to empty array
+        imageUrls: Array.isArray(hotel.imageUrls)
+          ? hotel.imageUrls
+          : JSON.parse(hotel.imageUrls || "[]"), // Parse JSON string or default to empty array
       };
       reset(normalizedHotelData);
     }
@@ -39,7 +44,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }) => {
     const formData = new FormData();
 
     if (hotel) {
-      formData.append("hotelId", hotel.hotelId); // Menambahkan hotelId jika ada
+      formData.append("hotelId", hotel.hotelId); // Append hotelId if available
     }
 
     formData.append("name", formDataJson.name);
@@ -75,21 +80,21 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }) => {
 
   return (
     <FormProvider {...formMethods}>
-      <form className="flex flex-col gap-10" onSubmit={onSubmit}>
+      <form className="container mt-5" onSubmit={onSubmit}>
         <DetailsSection />
         <TypeSection />
         <FacilitiesSection />
         <GuestsSection />
         <ImagesSection />
-        <span className="flex justify-end">
+        <div className="d-flex justify-content-end mt-4">
           <button
             disabled={isLoading}
             type="submit"
-            className="bg-blue-600 text-white p-2 font-bold hover:bg-blue-500 text-xl disabled:bg-gray-500"
+            className={`btn btn-primary ${isLoading ? "disabled" : ""} py-2 px-4`} 
           >
             {isLoading ? "Saving..." : "Save"}
           </button>
-        </span>
+        </div>
       </form>
     </FormProvider>
   );

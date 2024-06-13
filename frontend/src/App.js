@@ -8,14 +8,20 @@ import {
 import Layout from "./layouts/Layout";
 import Register from "./pages/Register";
 import SignIn from "./pages/Signin";
-import { useAppContext } from "./contexts/AppContext";
 import AddHotel from "./pages/AddHotel";
 import MyHotels from "./pages/MyHotels";
 import EditHotel from "./pages/EditHotel";
 import Search from "./pages/Search";
+import Booking from "./pages/Booking";
+import Detail from "./pages/Detail";
+import MyBookings from "./pages/MyBooking";
+import Home from "./pages/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAppContext } from "./contexts/AppContext";
 
 function App() {
-  const { isLoggedIn, isAdmin } = useAppContext(); // Mengambil status isLoggedIn dan isAdmin dari context
+  const { isLoggedIn } = useAppContext();
+
   return (
     <Router>
       <Routes>
@@ -23,7 +29,7 @@ function App() {
           path="/"
           element={
             <Layout>
-              <p>Home Page</p>
+              <Home />
             </Layout>
           }
         />
@@ -51,30 +57,61 @@ function App() {
             </Layout>
           }
         />
-        {isLoggedIn &&  (
+        <Route
+          path="/detail/:hotelId"
+          element={
+            <Layout>
+              <Detail />
+            </Layout>
+          }
+        />
+        {isLoggedIn && (
           <>
             <Route
-              path="/add-hotel"
+              path="/hotel/:hotelId/booking"
               element={
                 <Layout>
-                  <AddHotel />
+                  <Booking />
                 </Layout>
               }
             />
             <Route
-              path="/my-hotels"
+              path="/my-bookings"
               element={
                 <Layout>
-                  <MyHotels />
+                  <MyBookings />
                 </Layout>
+              }
+            />
+            {/* Protect the admin-only routes */}
+            <Route
+              path="/my-hotels"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <Layout>
+                    <MyHotels />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/add-hotel"
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <Layout>
+                    <AddHotel />
+                  </Layout>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/edit-hotel/:hotelId"
               element={
-                <Layout>
-                  <EditHotel />
-                </Layout>
+                <ProtectedRoute adminOnly={true}>
+                  <Layout>
+                    <EditHotel />
+                  </Layout>
+                </ProtectedRoute>
               }
             />
           </>

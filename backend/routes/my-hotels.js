@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
-import Hotel from "../models/hotel.js";
+import { Hotel } from "../models/hotel.js";
 import verifyToken from "../middleware/auth.js";
 import { body } from "express-validator";
 
@@ -11,11 +11,10 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB
+    fileSize: 5 * 1024 * 1024, 
   },
 });
 
-// Fungsi untuk mengunggah gambar ke Cloudinary
 async function uploadImages(imageFiles) {
   const uploadPromises = imageFiles.map(async (image) => {
     const b64 = Buffer.from(image.buffer).toString("base64");

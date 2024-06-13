@@ -1,31 +1,43 @@
-import React, { useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import Toast from "../components/Toast";
 import { useQuery } from "react-query";
 import * as apiClient from "../api-client";
+import { loadStripe } from "@stripe/stripe-js";
 
-const AppContext = React.createContext(undefined);
+const STRIPE_PUB_KEY = "pk_test_51PPQVXP01Wr75qZsjdZI86cjawzdHYPig3Z6pwRT56hrOiA0iLMTVGkMdta510oxL1E10Nu6iHfJcKmDyKWeE3ex00cBmc0Xc8";
+const stripePromise = loadStripe(STRIPE_PUB_KEY);
+
+const AppContext = createContext();
 
 export const AppContextProvider = ({ children }) => {
   const [toast, setToast] = useState(undefined);
-  const [isAdmin, setIsAdmin] = useState(false); // Menambahkan state isAdmin
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { isError, data } = useQuery("validateToken", apiClient.validateToken, {
-    retry: false,
-  });
+  const { isError: tokenError } = useQuery(
+    "validateToken",
+    apiClient.validateToken,
+    {
+      retry: false,
+      onSuccess: async () => {
+        try {
+          const userRole = await apiClient.fetchCurrentUserAdmin();
 
-  // Memeriksa apakah pengguna adalah admin dan mengatur state isAdmin
-  React.useEffect(() => {
-    if (!isError && data && data.email) {
-      const { email } = data;
-      const isAdminUser = checkAdminStatusByEmail(email); // Fungsi untuk memeriksa status admin berdasarkan email
-      setIsAdmin(isAdminUser);
+          setIsAdmin(userRole?.role === "admin");
+          setIsLoggedIn(true); 
+        } catch (error) {
+          console.error("Error fetching user role:", error);
+          setIsAdmin(false);
+        }
+      },
     }
-  }, [isError, data]);
+  );
 
-  const checkAdminStatusByEmail = (email) => {
-
-    return email === process.env.REACT_APP_ADMIN_EMAIL;
-  };
+  useEffect(() => {
+    if (tokenError) {
+      setIsLoggedIn(false);
+    }
+  }, [tokenError]);
 
   return (
     <AppContext.Provider
@@ -33,8 +45,9 @@ export const AppContextProvider = ({ children }) => {
         showToast: (toastMessage) => {
           setToast(toastMessage);
         },
-        isLoggedIn: !isError,
-        isAdmin: isAdmin, // Menyertakan isAdmin dalam value context
+        isLoggedIn,
+        isAdmin,
+        stripePromise,
       }}
     >
       {toast && (
@@ -49,10 +62,7 @@ export const AppContextProvider = ({ children }) => {
   );
 };
 
+// Custom hook to use the AppContext
 export const useAppContext = () => {
-  const context = useContext(AppContext);
-  if (context === undefined) {
-    throw new Error("useAppContext must be used within an AppContextProvider");
-  }
-  return context;
+  return useContext(AppContext);
 };

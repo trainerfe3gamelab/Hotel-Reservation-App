@@ -1,3 +1,4 @@
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
@@ -6,11 +7,11 @@ import { useNavigate } from "react-router-dom";
 
 /**
  * @typedef {Object} RegisterFormData
- * @property {string} firstName
- * @property {string} lastName
+ * @property {string} fullName
  * @property {string} email
  * @property {string} password
  * @property {string} confirmPassword
+ * @property {string} role - This will be hidden and default to "user"
  */
 
 export const RegisterFormData = {
@@ -18,6 +19,7 @@ export const RegisterFormData = {
   email: "",
   password: "",
   confirmPassword: "",
+  role: "user", // Default role
 };
 
 const Register = () => {
@@ -29,7 +31,9 @@ const Register = () => {
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm(RegisterFormData);
+  } = useForm({
+    defaultValues: RegisterFormData, // Set default values including role
+  });
 
   const mutation = useMutation(apiClient.register, {
     onSuccess: async () => {
@@ -67,6 +71,7 @@ const Register = () => {
           <p className="text-danger">{errors.fullName.message}</p>
         )}
       </div>
+
       <div className="mb-3">
         <label className="form-label">Email</label>
         <input
@@ -76,6 +81,7 @@ const Register = () => {
         />
         {errors.email && <p className="text-danger">{errors.email.message}</p>}
       </div>
+
       <div className="mb-3">
         <label className="form-label">Password</label>
         <input
@@ -93,6 +99,7 @@ const Register = () => {
           <p className="text-danger">{errors.password.message}</p>
         )}
       </div>
+
       <div className="mb-3">
         <label className="form-label">Confirm Password</label>
         <input
@@ -112,17 +119,25 @@ const Register = () => {
           <p className="text-danger">{errors.confirmPassword.message}</p>
         )}
       </div>
+
+      {/* Hidden role field */}
+      <input
+        type="hidden"
+        {...register("role")}
+        value="user"
+      />
+
       <span className="d-flex items-center justify-content-between">
-      <span>
+        <span>
           Already have an account?{" "}
           <a href="/login" className="text-primary">
             Login here
           </a>
         </span>
-        
-      <button type="submit" className="btn btn-primary btn-lg">
-        Create Account
-      </button>
+
+        <button type="submit" className="btn btn-primary btn-lg">
+          Create Account
+        </button>
       </span>
     </form>
   );

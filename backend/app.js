@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import myHotelsRoutes from "./routes/my-hotels.js";
 import { v2 as cloudinary} from "cloudinary";
 import hotelRoutes from "./routes/hotels.js";
+import bookingRoutes from "./routes/my-bookings.js";
+import Sequelize from "sequelize";
 
 dotenv.config();
 
@@ -28,7 +30,7 @@ app.use(
   })
 );
 
-const db = mysql.createConnection({
+export const db = mysql.createConnection({
   host: process.env.DATABASE_HOST,
   user: process.env.DATABASE_USER,
   password: process.env.DATABASE_PASSWORD,
@@ -47,6 +49,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
 app.use("/api/hotels", hotelRoutes);
+app.use("/api/my-bookings", bookingRoutes);
 
 app.listen(7000, () => {
   console.log("Server started on port 7000");
