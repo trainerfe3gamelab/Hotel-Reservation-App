@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export const SignInFormData = {
   email: String,
@@ -11,6 +13,7 @@ export const SignInFormData = {
 };
 
 export const SignIn = () => {
+  const [showPassword, setShowPassword] = useState(false); 
   const { showToast } = useAppContext();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -37,6 +40,10 @@ export const SignIn = () => {
     },
   });
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev); 
+  };
+
   const onSubmit = handleSubmit((data) => {
     mutation.mutate(data);
   });
@@ -60,10 +67,10 @@ export const SignIn = () => {
             <p className="text-danger">{errors.email.message}</p>
           )}
         </div>
-        <div className="mb-3">
+        <div className="mb-3 position-relative">
           <label className="form-label">Password</label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"} 
             className="form-control"
             {...register("password", {
               required: "This field is required",
@@ -72,6 +79,12 @@ export const SignIn = () => {
                 message: "Password must be at least 6 characters",
               },
             })}
+          />
+          <FontAwesomeIcon
+            icon={showPassword ? faEyeSlash : faEye}
+            className={`position-absolute end-0 top-50 translate-middle-y ${showPassword ? 'text-secondary' : 'text-primary'}`}
+            style={{ marginTop: "15px", marginRight: "10px", cursor: "pointer" }}
+            onClick={togglePasswordVisibility}
           />
           {errors.password && (
             <p className="text-danger">{errors.password.message}</p>

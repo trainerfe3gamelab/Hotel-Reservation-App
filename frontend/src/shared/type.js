@@ -12,7 +12,6 @@ export const HotelFormData = {
   childrenCount: Number,
 };
 
-// Tipe SearchParams
 export const SearchParams = {
  destination: String,
  checkIn: String,

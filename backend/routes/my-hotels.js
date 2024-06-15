@@ -51,15 +51,13 @@ router.post(
       const imageFiles = req.files;
       const newHotel = req.body;
 
-      // Mengunggah gambar ke Cloudinary
+
       const imageUrls = await uploadImages(imageFiles);
 
-      // Menambah informasi gambar ke newHotel
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();
-      newHotel.userId = req.userId; // Mengambil userId dari token terverifikasi
+      newHotel.userId = req.userId; 
 
-      // Menyimpan hotel baru menggunakan Sequelize
       const hotel = await Hotel.create(newHotel);
 
       res.status(201).send(hotel);
@@ -70,7 +68,6 @@ router.post(
   }
 );
 
-// Route untuk mendapatkan daftar hotel milik user
 router.get("/", verifyToken, async (req, res) => {
   try {
     const hotels = await Hotel.findAll({ where: { userId: req.userId } });
@@ -80,7 +77,6 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
-// Route untuk mendapatkan hotel berdasarkan ID
 router.get("/:id", verifyToken, async (req, res) => {
   const id = req.params.id;
   try {
@@ -99,7 +95,6 @@ router.get("/:id", verifyToken, async (req, res) => {
   }
 });
 
-// Route untuk memperbarui hotel berdasarkan ID
 router.put(
   "/:hotelId",
   verifyToken,
@@ -109,12 +104,10 @@ router.put(
       const hotelId = req.params.hotelId;
       const updatedHotel = req.body;
 
-      // Log untuk melihat semua data yang diterima
       console.log("Hotel ID from URL:", hotelId);
       console.log("Updated hotel data:", updatedHotel);
       console.log("Received files:", req.files);
 
-      // Tambahkan validasi jika `hotelId` dari URL adalah undefined
       if (!hotelId) {
         return res.status(400).json({ message: "Hotel ID is missing or undefined" });
       }

@@ -25,7 +25,6 @@ const AddHotel = () => {
     },
   });
 
-  // Fungsi untuk menangani penyimpanan data hotel
   const handleSave = (hotelFormData) => {
     mutate(hotelFormData);
   };

@@ -251,7 +251,6 @@ router.post("/:hotelId/rating", verifyToken, async (req, res) => {
   const { hotelId } = req.params;
   let { rating } = req.body;
 
-  // Validasi rating
   if (typeof rating !== 'number' || isNaN(rating)) {
     return res.status(400).json({ error: 'Rating must be a valid number' });
   }
@@ -259,17 +258,14 @@ router.post("/:hotelId/rating", verifyToken, async (req, res) => {
   rating = parseFloat(rating);
 
   try {
-    // Dapatkan userId dari token atau sesi
-    const userId = req.userId; // Pastikan userId tersedia di dalam req setelah verifikasi token
+    const userId = req.userId;
 
-    // Cari hotel berdasarkan hotelId
     const hotel = await Hotel.findByPk(hotelId);
 
     if (!hotel) {
       return res.status(404).json({ error: 'Hotel not found' });
     }
 
-    // Cari booking berdasarkan hotelId dan userId
     const booking = await Booking.findOne({
       where: {
         hotelId: hotelId,
@@ -281,7 +277,6 @@ router.post("/:hotelId/rating", verifyToken, async (req, res) => {
       return res.status(404).json({ error: 'Booking not found' });
     }
 
-    // Simpan rating ke booking
     booking.rating = rating;
     await booking.save();
 
@@ -315,7 +310,7 @@ router.get('/:hotelId/ratingAvg', async (req, res) => {
       attributes: [
         'hotelId',
         [Sequelize.fn('AVG', Sequelize.col('rating')), 'avgRating'],
-        [Sequelize.fn('COUNT', Sequelize.col('rating')), 'numUsers'] // Hitung jumlah pengguna yang memberikan rating
+        [Sequelize.fn('COUNT', Sequelize.col('rating')), 'numUsers'] 
       ],
       where: {
         hotelId,
@@ -331,7 +326,7 @@ router.get('/:hotelId/ratingAvg', async (req, res) => {
     }
 
     const { avgRating, numUsers } = averageRatings[0].dataValues;
-    res.json({ avgRating, numUsers }); // Mengembalikan avgRating dan numUsers
+    res.json({ avgRating, numUsers }); 
   } catch (error) {
     console.error('Failed to fetch average ratings:', error);
     res.status(500).json({ error: 'Server error' });

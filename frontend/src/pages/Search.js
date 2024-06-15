@@ -8,6 +8,9 @@ import StarRatingFilter from "../components/StarRatingFilter";
 import HotelTypesFilter from "../components/HotelTypesFilter";
 import FacilitiesFilter from "../components/FacilitiesFilter";
 import PriceFilter from "../components/PriceFilter";
+import { Button } from "react-bootstrap";
+import { FaFilter } from "react-icons/fa";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Search = () => {
   const search = useSearchContext();
@@ -19,6 +22,7 @@ const Search = () => {
   const [sortOption, setSortOption] = useState("");
   const scrollPositionRef = useRef(null);
   const [totalHotelsFound, setTotalHotelsFound] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
 
   const searchParams = {
     destination: search?.destination || "",
@@ -122,7 +126,7 @@ const Search = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
@@ -132,7 +136,8 @@ const Search = () => {
   return (
     <div className="container mt-5">
       <div className="row">
-        <div className="col-lg-3">
+        {/* Filter Section */}
+        <div className={`col-lg-3 ${showFilters ? "" : "d-none d-lg-block"}`}>
           <div className="rounded-lg border border-secondary p-3 mb-3">
             <h3 className="text-lg font-semibold border-b border-secondary pb-2 mb-3">
               Filter by:
@@ -155,7 +160,18 @@ const Search = () => {
             />
           </div>
         </div>
+
+        {/* Results Section */}
         <div className="col-lg-9">
+          {/* Toggle Filters Button for Mobile */}
+          <Button
+            variant="secondary"
+            className="d-lg-none mb-3 w-100"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <FaFilter /> {showFilters ? "Hide Filters" : "Show Filters"}
+          </Button>
+
           <div className="d-flex justify-content-between align-items-center mb-3">
             <span className="text-xl font-weight-bold">
               {totalHotelsFound} Hotels found
@@ -165,6 +181,7 @@ const Search = () => {
               value={sortOption}
               onChange={(event) => setSortOption(event.target.value)}
               className="form-select p-2 border rounded-md"
+              style={{ maxWidth: "200px" }}
             >
               <option value="">Sort By</option>
               <option value="starRatingDesc">Star Rating (high to low)</option>

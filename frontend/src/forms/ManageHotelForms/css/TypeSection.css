@@ -8,3 +8,11 @@
     flex: 1;
   }
   
+  @media screen and (max-width: 768px) {
+    .button-grid{
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      vertical-align:middle;
+    }
+  }

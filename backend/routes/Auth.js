@@ -25,7 +25,7 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email, password } = req.body;
+    const { password } = req.body;
 
     try {
       const user = await User.findOne({ where: { email: req.body.email } });
@@ -63,7 +63,7 @@ router.post(
 );
 
 router.get("/validate-token", verifyToken, (req, res) => {
-  res.status(200).send({ userId: req.userId });
+  res.status(200).send({ userId: req.userId, token: req.cookies["auth_token"] });
 });
 
 router.post("/logout", (req, res) => {

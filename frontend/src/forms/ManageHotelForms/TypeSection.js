@@ -14,19 +14,15 @@ const TypeSection = () => {
     formState: { errors },
   } = useFormContext();
 
-  // Watch the current type from form context
   const watchedType = watch("type");
 
-  // Initialize selectedType state with the initial value from watch("type")
   const [selectedType, setSelectedType] = useState(watchedType);
 
-  // Update selectedType and form field value on selection
   const handleSelect = (type) => {
     setSelectedType(type);
     setValue("type", type);
   };
 
-  // Update selectedType if watchedType changes (e.g., when hotel data updates)
   useEffect(() => {
     if (watchedType !== selectedType) {
       setSelectedType(watchedType);

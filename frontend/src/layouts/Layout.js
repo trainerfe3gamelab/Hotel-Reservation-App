@@ -4,14 +4,16 @@ import Header from "../components/Header";
 import Hero from "../components/Hero";
 import SearchBar from '../components/SearchBar';
 
-const Layout = ({ children }) => {
+const Layout = ({ children, showSearchBar = true }) => {
   return (
     <div className="d-flex flex-column min-vh-100">
       <Header />
       <Hero />
-      <div className='container mx-auto'>
-        <SearchBar />
-      </div>
+      {showSearchBar && (
+        <div className='container mx-auto'>
+          <SearchBar />
+        </div>
+      )}
       <div className='container flex-grow-1 mx-auto mb-4'>
         {children}
       </div>

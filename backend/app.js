@@ -9,7 +9,7 @@ import myHotelsRoutes from "./routes/my-hotels.js";
 import { v2 as cloudinary} from "cloudinary";
 import hotelRoutes from "./routes/hotels.js";
 import bookingRoutes from "./routes/my-bookings.js";
-import Sequelize from "sequelize";
+import profileRoutes from "./routes/profile.js";
 
 dotenv.config();
 
@@ -50,6 +50,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/my-hotels", myHotelsRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/my-bookings", bookingRoutes);
+app.use("/api/profile", profileRoutes)
 
 app.listen(7000, () => {
   console.log("Server started on port 7000");

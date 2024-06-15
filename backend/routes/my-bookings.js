@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", verifyToken, async (req, res) => {
   try {
-    // Ambil semua bookings yang terkait dengan userId yang sedang diautentikasi
     const bookings = await Booking.findAll({
       where: {
         userId: req.userId
@@ -14,15 +13,13 @@ router.get("/", verifyToken, async (req, res) => {
       attributes: ["hotelId", "adultCount", "childrenCount", "checkIn", "checkOut", "rating"],
     });
 
-    // Ambil semua hotel yang memiliki hotelId yang ada di bookings di atas
     const hotelIds = bookings.map(booking => booking.hotelId);
     const hotels = await Hotel.findAll({
       where: {
-        hotelId: hotelIds // Filter hotels berdasarkan hotelId dari bookings
+        hotelId: hotelIds 
       }
     });
 
-    // Mapped results untuk merangkum data hotel
     const mappedResults = hotels.map(hotel => ({
       hotelId: hotel.hotelId,
       name: hotel.name,
@@ -31,7 +28,7 @@ router.get("/", verifyToken, async (req, res) => {
       starRating: hotel.starRating,
       pricePerNight: hotel.pricePerNight,
       imageUrls: hotel.imageUrls,
-      bookings: bookings.filter(booking => booking.hotelId === hotel.hotelId) // Filter bookings yang sesuai dengan hotelId saat ini
+      bookings: bookings.filter(booking => booking.hotelId === hotel.hotelId) 
     }));
 
     res.status(200).json(mappedResults);

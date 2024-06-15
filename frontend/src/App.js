@@ -18,6 +18,7 @@ import MyBookings from "./pages/MyBooking";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAppContext } from "./contexts/AppContext";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -67,6 +68,14 @@ function App() {
         />
         {isLoggedIn && (
           <>
+            <Route
+              path="/my-profile"
+              element={
+                <Layout>
+                  <MyProfile />
+                </Layout>
+              }
+            />
             <Route
               path="/hotel/:hotelId/booking"
               element={

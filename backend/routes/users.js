@@ -1,5 +1,5 @@
 import express from "express";
-import User from "../models/user.js"; // Ensure this is the path to your Sequelize User model
+import User from "../models/user.js"; 
 import jwt from "jsonwebtoken";
 import { check, validationResult } from "express-validator";
 import verifyToken from "../middleware/auth.js";

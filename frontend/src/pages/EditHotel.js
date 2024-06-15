@@ -16,13 +16,12 @@ const EditHotel = () => {
     }
   );
 
-  // Mutation untuk memperbarui data hotel
   const { mutate, isLoading } = useMutation(apiClient.updateMyHotelById, {
     onSuccess: () => {
-      showToast({ message: "Hotel Saved!", type: "SUCCESS" }); // Tampilkan notifikasi sukses jika berhasil
+      showToast({ message: "Hotel Saved!", type: "SUCCESS" }); 
     },
     onError: () => {
-      showToast({ message: "Error Saving Hotel", type: "ERROR" }); // Tampilkan notifikasi error jika gagal
+      showToast({ message: "Error Saving Hotel", type: "ERROR" }); 
     },
   });
 

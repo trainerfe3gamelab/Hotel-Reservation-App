@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { BsMap, BsBuilding } from "react-icons/bs";
 import { BiMoney, BiHotel, BiStar } from "react-icons/bi";
 import "./css/MyHotel.css";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const MyHotels = () => {
   const {
@@ -17,20 +18,17 @@ const MyHotels = () => {
     },
   });
 
-  // Tampilkan loading spinner atau pesan loading
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
-  // Tampilkan pesan error jika terjadi kesalahan
   if (error) {
     return <div>Error loading hotels. Please try again later.</div>;
   }
 
-  // Tampilkan pesan jika tidak ada hotel yang ditemukan
   if (!hotelData || hotelData.length === 0) {
     return (
-        <div className="center-container">
+        <div className="center-container" style={{marginTop: "100px"}}>
           <h1>No Hotel Found</h1>
           <Link to="/add-hotel" className="btn-mid btn btn-primary">Add Hotel</Link>
         </div>

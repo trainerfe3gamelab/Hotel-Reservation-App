@@ -9,6 +9,7 @@ export const fetchCurrentUser = async () => {
   }
   return response.json();
 };
+
 export const fetchCurrentUserAdmin = async () => {
   const response = await fetch(`${API_BASE_URL}/api/users/me/admin`, {
     credentials: "include",
@@ -19,8 +20,6 @@ export const fetchCurrentUserAdmin = async () => {
   return response.json();
 };
 
-
-// Fungsi untuk mendaftarkan user baru
 export const register = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/api/users/register`, {
     method: "POST",
@@ -38,7 +37,6 @@ export const register = async (formData) => {
   }
 };
 
-// Fungsi untuk sign-in user
 export const SignIn = async (formData) => {
   const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
     method: "POST",
@@ -56,7 +54,6 @@ export const SignIn = async (formData) => {
   return body;
 };
 
-// Fungsi untuk memvalidasi token
 export const validateToken = async () => {
   const response = await fetch(`${API_BASE_URL}/api/auth/validate-token`, {
     credentials: "include",
@@ -69,7 +66,6 @@ export const validateToken = async () => {
   return response.json();
 };
 
-// Fungsi untuk sign-out user
 export const signOut = async () => {
   const response = await fetch(`${API_BASE_URL}/api/auth/logout`, {
     credentials: "include",
@@ -81,7 +77,6 @@ export const signOut = async () => {
   }
 };
 
-// Fungsi untuk menambah hotel user
 export const addMyHotel = async (hotelFormData) => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
     method: "POST",
@@ -96,7 +91,6 @@ export const addMyHotel = async (hotelFormData) => {
   return response.json();
 };
 
-// Fungsi untuk mengambil data hotel user
 export const fetchMyHotels = async () => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels`, {
     credentials: "include",
@@ -109,7 +103,6 @@ export const fetchMyHotels = async () => {
   return response.json();
 };
 
-// Fungsi untuk mengambil data hotel user berdasarkan ID
 export const fetchMyHotelById = async (hotelId) => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
     credentials: "include",
@@ -122,13 +115,15 @@ export const fetchMyHotelById = async (hotelId) => {
   return response.json();
 };
 
-// Fungsi untuk memperbarui data hotel user berdasarkan ID
 export const updateMyHotelById = async (hotelFormData) => {
-  const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelFormData.get("hotelId")}`, {
-    method: "PUT",
-    credentials: "include",
-    body: hotelFormData,
-  });
+  const response = await fetch(
+    `${API_BASE_URL}/api/my-hotels/${hotelFormData.get("hotelId")}`,
+    {
+      method: "PUT",
+      credentials: "include",
+      body: hotelFormData,
+    }
+  );
 
   if (!response.ok) {
     throw new Error("Failed to update hotel");
@@ -247,24 +242,46 @@ export const rateHotel = async (hotelId, rating) => {
   if (!response.ok) {
     throw new Error("Error rating hotel");
   }
-}
-
-const checkResponse = async (response) => {
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(errorText || 'Server error');
-  }
-  return response.json();
 };
 
 export const fetchHotelAverageRating = async (hotelId) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/hotels/${hotelId}/ratingAvg`);
+    const response = await fetch(
+      `${API_BASE_URL}/api/hotels/${hotelId}/ratingAvg`
+    );
     if (!response.ok) {
-      throw new Error('Failed to fetch average ratings');
+      throw new Error("Failed to fetch average ratings");
     }
     return await response.json();
   } catch (error) {
     throw new Error(error.message);
   }
+};
+
+export const fetchUserProfile = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/profile/me`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching profile");
+  }
+  return response.json();
+};
+
+export const updateUserProfile = async (profileData) => {
+  const response = await fetch(`${API_BASE_URL}/api/profile/me`, {
+    method: "PUT",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(profileData),
+  });
+
+  if (!response.ok) {
+    const errorBody = await response.json();
+    throw new Error(errorBody.message);
+  }
+
+  return response.json();
 };

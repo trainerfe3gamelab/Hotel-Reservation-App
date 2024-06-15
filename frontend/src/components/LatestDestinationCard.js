@@ -15,7 +15,7 @@ const LatestDestinationCard = ({ hotel }) => {
       try {
         const response = await apiClient.fetchHotelAverageRating(hotel.hotelId);
         setAverageRating(response.avgRating);
-        setNumUsers(response.numUsers); // Menyimpan jumlah pengguna dari respons
+        setNumUsers(response.numUsers); 
       } catch (error) {
         setError(error.message);
       }

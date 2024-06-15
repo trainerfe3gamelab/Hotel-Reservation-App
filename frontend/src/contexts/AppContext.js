@@ -62,7 +62,6 @@ export const AppContextProvider = ({ children }) => {
   );
 };
 
-// Custom hook to use the AppContext
 export const useAppContext = () => {
   return useContext(AppContext);
 };

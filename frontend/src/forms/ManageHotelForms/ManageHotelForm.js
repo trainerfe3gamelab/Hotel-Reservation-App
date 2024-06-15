@@ -31,10 +31,10 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }) => {
         ...hotel,
         facilities: Array.isArray(hotel.facilities)
           ? hotel.facilities
-          : JSON.parse(hotel.facilities || "[]"), // Parse JSON string or default to empty array
+          : JSON.parse(hotel.facilities || "[]"), 
         imageUrls: Array.isArray(hotel.imageUrls)
           ? hotel.imageUrls
-          : JSON.parse(hotel.imageUrls || "[]"), // Parse JSON string or default to empty array
+          : JSON.parse(hotel.imageUrls || "[]"), 
       };
       reset(normalizedHotelData);
     }
@@ -44,7 +44,7 @@ const ManageHotelForm = ({ onSave, isLoading, hotel }) => {
     const formData = new FormData();
 
     if (hotel) {
-      formData.append("hotelId", hotel.hotelId); // Append hotelId if available
+      formData.append("hotelId", hotel.hotelId); 
     }
 
     formData.append("name", formDataJson.name);

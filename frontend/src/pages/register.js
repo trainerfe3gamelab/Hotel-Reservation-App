@@ -1,28 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { useAppContext } from "../contexts/AppContext";
 import { useNavigate } from "react-router-dom";
-
-/**
- * @typedef {Object} RegisterFormData
- * @property {string} fullName
- * @property {string} email
- * @property {string} password
- * @property {string} confirmPassword
- * @property {string} role - This will be hidden and default to "user"
- */
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 export const RegisterFormData = {
   fullName: "",
   email: "",
   password: "",
   confirmPassword: "",
-  role: "user", // Default role
+  role: "user", 
 };
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
   const navigate = useNavigate();
   const { showToast } = useAppContext();
   const queryClient = useQueryClient();
@@ -32,7 +27,7 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: RegisterFormData, // Set default values including role
+    defaultValues: RegisterFormData, 
   });
 
   const mutation = useMutation(apiClient.register, {
@@ -51,6 +46,14 @@ const Register = () => {
       });
     },
   });
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev); 
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword((prev) => !prev); 
+  };
 
   const onSubmit = handleSubmit((data) => {
     mutation.mutate(data);
@@ -82,10 +85,10 @@ const Register = () => {
         {errors.email && <p className="text-danger">{errors.email.message}</p>}
       </div>
 
-      <div className="mb-3">
+      <div className="mb-3 position-relative">
         <label className="form-label">Password</label>
         <input
-          type="password"
+          type={showPassword ? "text" : "password"} 
           className="form-control"
           {...register("password", {
             required: "This field is required",
@@ -95,15 +98,21 @@ const Register = () => {
             },
           })}
         />
+        <FontAwesomeIcon
+          icon={showPassword ? faEyeSlash : faEye}
+          className={`position-absolute end-0 top-50 translate-middle-y ${showPassword ? 'text-secondary' : 'text-primary'}`}
+          style={{ marginTop: "15px", marginRight: "10px", cursor: "pointer" }}
+          onClick={togglePasswordVisibility}
+        />
         {errors.password && (
           <p className="text-danger">{errors.password.message}</p>
         )}
       </div>
 
-      <div className="mb-3">
+      <div className="mb-3 position-relative">
         <label className="form-label">Confirm Password</label>
         <input
-          type="password"
+          type={showConfirmPassword ? "text" : "password"} 
           className="form-control"
           {...register("confirmPassword", {
             validate: (val) => {
@@ -115,12 +124,17 @@ const Register = () => {
             },
           })}
         />
+        <FontAwesomeIcon
+          icon={showConfirmPassword ? faEyeSlash : faEye}
+          className={`position-absolute end-0 top-50 translate-middle-y ${showConfirmPassword ? 'text-secondary' : 'text-primary'}`}
+          style={{ marginTop: "15px", marginRight: "10px", cursor: "pointer" }}
+          onClick={toggleConfirmPasswordVisibility}
+        />
         {errors.confirmPassword && (
           <p className="text-danger">{errors.confirmPassword.message}</p>
         )}
       </div>
 
-      {/* Hidden role field */}
       <input
         type="hidden"
         {...register("role")}

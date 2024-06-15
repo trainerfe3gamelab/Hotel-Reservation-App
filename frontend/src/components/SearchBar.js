@@ -4,12 +4,12 @@ import { MdTravelExplore } from "react-icons/md";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from "react-router-dom";
+import { Button, Form, Row, Col, InputGroup } from "react-bootstrap";
 
 const SearchBar = () => {
   const navigate = useNavigate();
   const search = useSearchContext();
 
-  // Initialize state variables for input values
   const [destination, setDestination] = useState(search.destination || "");
   const [checkIn, setCheckIn] = useState(search.checkIn || new Date());
   const [checkOut, setCheckOut] = useState(search.checkOut || new Date());
@@ -41,88 +41,98 @@ const SearchBar = () => {
   maxDate.setFullYear(maxDate.getFullYear() + 1);
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="bg-warning p-3 rounded shadow-sm row align-items-center mt-3"
-    >
-      <div className="col-md-4 d-flex align-items-center mb-3 mb-md-0">
-        <MdTravelExplore size={25} className="me-2" />
-        <input
-          type="text"
-          placeholder="Where are you going?"
-          className="form-control"
-          value={destination}
-          onChange={(event) => setDestination(event.target.value)}
-        />
-      </div>
+    <Form onSubmit={handleSubmit} className="bg-warning p-3 rounded shadow-sm" style={{ height: "auto", marginTop: "-50px" }}>
+      <Row className="g-3 align-items-center">
+        <Col md={4} xs={12}>
+          <InputGroup className="flex-nowrap" style={{marginTop: "33px"}}>
+            <InputGroup.Text>
+              <MdTravelExplore size={25} />
+            </InputGroup.Text>
+            <Form.Control
+              type="text"
+              placeholder="Where are you going?"
+              value={destination}
+              onChange={(event) => setDestination(event.target.value)}
+              aria-label="Destination"
+            />
+          </InputGroup>
+        </Col>
 
-      {/* Adults and Children Count */}
-      <div className="col-md-2 d-flex flex-column flex-md-row align-items-center mb-3 mb-md-0 gap-2">
-        <div>
-          <label className="form-label">
-            Adults:
-            <input
+        {/* Adults and Children Count */}
+        <Col md={2} xs={6}>
+          <Form.Group controlId="formAdultCount">
+            <Form.Label>Adults:</Form.Label>
+            <Form.Control
               type="number"
-              className="form-control"
               min={1}
               max={20}
               value={adultCount}
               onChange={(event) => setAdultCount(parseInt(event.target.value))}
+              aria-label="Adult Count"
             />
-          </label>
-        </div>
-        <div>
-          <label className="form-label">
-            Children:
-            <input
+          </Form.Group>
+        </Col>
+
+        <Col md={2} xs={6}>
+          <Form.Group controlId="formChildrenCount">
+            <Form.Label>Children:</Form.Label>
+            <Form.Control
               type="number"
-              className="form-control"
               min={0}
               max={20}
               value={childrenCount}
               onChange={(event) => setChildrenCount(parseInt(event.target.value))}
+              aria-label="Children Count"
             />
-          </label>
-        </div>
-      </div>
+          </Form.Group>
+        </Col>
 
-      <div className="col-md-2 mb-3 mb-md-0">
-        <DatePicker
-          selected={checkIn}
-          onChange={(date) => setCheckIn(date)}
-          selectsStart
-          startDate={checkIn}
-          endDate={checkOut}
-          minDate={minDate}
-          maxDate={maxDate}
-          placeholderText="Check-in date"
-          className="form-control"
-        />
-      </div>
+        {/* Date Pickers */}
+        
+        <Col md={2} xs={6}>
+          <Form.Group controlId="formCheckInDate">
+            <Form.Label>Check-in:</Form.Label>
+            <DatePicker
+              selected={checkIn}
+              onChange={(date) => setCheckIn(date)}
+              selectsStart
+              startDate={checkIn}
+              endDate={checkOut}
+              minDate={minDate}
+              maxDate={maxDate}
+              placeholderText="Check-in date"
+              className="form-control"
+            />
+          </Form.Group>
+        </Col>
 
-      <div className="col-md-2 mb-3 mb-md-0">
-        <DatePicker
-          selected={checkOut}
-          onChange={(date) => setCheckOut(date)}
-          selectsEnd
-          startDate={checkIn}
-          endDate={checkOut}
-          minDate={minDate}
-          maxDate={maxDate}
-          placeholderText="Check-out date"
-          className="form-control"
-        />
-      </div>
+        <Col md={2} xs={6}>
+          <Form.Group controlId="formCheckOutDate">
+            <Form.Label>Check-out:</Form.Label>
+            <DatePicker
+              selected={checkOut}
+              onChange={(date) => setCheckOut(date)}
+              selectsEnd
+              startDate={checkIn}
+              endDate={checkOut}
+              minDate={minDate}
+              maxDate={maxDate}
+              placeholderText="Check-out date"
+              className="form-control"
+            />
+          </Form.Group>
+        </Col>
 
-      <div className="col-md-2 d-flex gap-2">
-        <button type="submit" className="btn btn-primary w-50">
-          Search
-        </button>
-        <button type="button" onClick={handleClear} className="btn btn-danger w-50">
-          Clear
-        </button>
-      </div>
-    </form>
+        <Col md={2} xs={12} className="d-flex flex-column flex-md-row gap-2 w-100 justify-content-end">
+          <Button type="submit" className="btn btn-primary">
+            Search
+          </Button>
+          <Button type="button" onClick={handleClear} className="btn btn-danger">
+            Clear
+          </Button>
+        </Col>
+      </Row>
+    </Form>
   );
 };
 

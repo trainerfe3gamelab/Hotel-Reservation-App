@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 
-// Create the SearchContext with undefined as the default value
 const SearchContext = React.createContext(undefined);
 
 export const SearchContextProvider = ({ children }) => {

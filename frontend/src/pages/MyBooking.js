@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import * as apiClient from '../api-client';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const MyBookings = () => {
   const { data: hotels, isLoading, isError, refetch } = useQuery(
@@ -14,7 +15,6 @@ const MyBookings = () => {
   const [filledRatingStatus, setFilledRatingStatus] = useState({});
 
   useEffect(() => {
-    // Initialize ratingInput with the user's existing ratings from the bookings data
     if (hotels) {
       const initialRatings = {};
       const initialFilledStatus = {};
@@ -45,7 +45,7 @@ const MyBookings = () => {
       }
 
       await apiClient.rateHotel(hotelId, ratingInput[hotelId]);
-      setRatingInput({ ...ratingInput, [hotelId]: undefined }); // Clear rating input
+      setRatingInput({ ...ratingInput, [hotelId]: undefined }); 
       setRatingError({ ...ratingError, [hotelId]: '' });
       await refetch();
     } catch (error) {
@@ -54,7 +54,7 @@ const MyBookings = () => {
   };
 
   if (isLoading) {
-    return <span>Loading...</span>;
+    return <LoadingSpinner />;
   }
 
   if (isError) {
