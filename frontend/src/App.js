@@ -19,6 +19,7 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAppContext } from "./contexts/AppContext";
 import MyProfile from "./pages/MyProfile";
+import Register from "./pages/register";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -39,6 +40,14 @@ function App() {
           element={
             <Layout>
               <Search />
+            </Layout>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <Register />
             </Layout>
           }
         />
