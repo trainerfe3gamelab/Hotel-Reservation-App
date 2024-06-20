@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from "sequelize";
 
-const sequelize = new Sequelize("capstone", "root", "", {
-  host: "localhost",
+const sequelize = new Sequelize("h9etkS3gmQcM9Z33", "CYOlBWORfFszeBVL", "tNkBOVpkaBVL3YFV", {
+  host: "educalab.id",
   dialect: "mysql",
 });
 
