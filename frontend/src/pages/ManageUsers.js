@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 const ManageUsers = () => {
   const queryClient = useQueryClient();
@@ -73,7 +75,6 @@ const ManageUsers = () => {
       email: formData.email,
       role: formData.role,
     };
-    // Only include password if it's not empty
     if (formData.password.trim() !== "") {
       dataToUpdate.password = formData.password;
     }
@@ -150,13 +151,31 @@ const ManageUsers = () => {
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Role</label>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleInputChange}
-                      />
+                      <div className="position-relative">
+                        <select
+                          className="form-control"
+                          name="role"
+                          value={formData.role}
+                          onChange={handleInputChange}
+                          style={{ paddingRight: "30px" }}
+                        >
+                          <option value="">Select Role</option>
+                          <option value="admin">Admin</option>
+                          <option value="user">User</option>
+                        </select>
+                        <FontAwesomeIcon
+                          icon={faChevronDown}
+                          className={`position-absolute dropdown-arrow ${
+                            formData.role === "" ? "" : "rotated"
+                          }`}
+                          style={{
+                            top: "50%",
+                            right: "10px",
+                            transform: "translateY(-50%)",
+                            transition: "transform 0.2s",
+                          }}
+                        />
+                      </div>
                     </div>
                     <div className="mb-3">
                       <label className="form-label">Password</label>
