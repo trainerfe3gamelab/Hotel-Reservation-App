@@ -1,9 +1,14 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-const sequelize = new Sequelize('capstone', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql'
+// const sequelize = new Sequelize('capstone', 'root', '', {
+//   host: 'localhost',
+//   dialect: 'mysql'
+// });
+const sequelize = new Sequelize('h9etkS3gmQcM9Z33', 'CYOlBWORfFszeBVL', 'tNkBOVpkaBVL3YFV', {
+  host: 'educalab.id',
+  dialect: 'mysql',
+  port: 3307,
 });
 
 class User extends Model {
