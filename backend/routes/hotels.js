@@ -14,10 +14,10 @@ const stripe = new Stripe(
 const router = express.Router();
 
 const pool = mysql.createPool({
-  host: "educalab.id",
-  user: "CYOlBWORfFszeBVL",
-  password: "tNkBOVpkaBVL3YFV",
-  database: "h9etkS3gmQcM9Z33",
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "capstone",
 });
 
 const constructSearchQuery = (queryParams) => {

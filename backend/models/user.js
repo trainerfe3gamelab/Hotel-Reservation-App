@@ -1,9 +1,8 @@
 import { Sequelize, DataTypes, Model } from 'sequelize';
 import bcrypt from 'bcryptjs';
 
-
-const sequelize = new Sequelize('h9etkS3gmQcM9Z33', 'CYOlBWORfFszeBVL', 'tNkBOVpkaBVL3YFV', {
-  host: 'educalab.id',
+const sequelize = new Sequelize('capstone', 'root', '', {
+  host: 'localhost',
   dialect: 'mysql'
 });
 
