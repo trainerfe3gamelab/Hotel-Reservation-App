@@ -60,7 +60,7 @@ const Register = () => {
   });
 
   return (
-    <form className="container mt-5" onSubmit={onSubmit}>
+    <form className="container my-4" onSubmit={onSubmit}>
       <h2 className="text-center mb-4">Create an Account</h2>
 
       <div className="mb-3">

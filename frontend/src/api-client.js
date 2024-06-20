@@ -103,6 +103,19 @@ export const fetchMyHotels = async () => {
   return response.json();
 };
 
+export const deleteHotel = async (hotelId) => {
+  const response = await fetch(`${API_BASE_URL}/api/my-hotels/delete/${hotelId}`, {
+    method: "DELETE",  // Ensure the method is DELETE
+    credentials: "include",  // Include credentials if required (cookies, auth tokens)
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to delete hotel");
+  }
+
+  return response.json();
+};
+
 export const fetchMyHotelById = async (hotelId) => {
   const response = await fetch(`${API_BASE_URL}/api/my-hotels/${hotelId}`, {
     credentials: "include",
@@ -281,6 +294,45 @@ export const updateUserProfile = async (profileData) => {
   if (!response.ok) {
     const errorBody = await response.json();
     throw new Error(errorBody.message);
+  }
+
+  return response.json();
+};
+
+export const fetchAllUsers = async () => {
+  const response = await fetch(`${API_BASE_URL}/api/profile/users`, {
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error fetching users");
+  }
+  return response.json();
+};
+
+export const deleteUser = async (userId) => {
+  const response = await fetch(`${API_BASE_URL}/api/profile/users/${userId}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
+  if (!response.ok) {
+    throw new Error("Error deleting users");
+  }
+  return response.json();
+};
+
+export const updateUser = async (userId, updatedData) => {
+  const { fullName, email, role, password } = updatedData;
+  const response = await fetch(`${API_BASE_URL}/api/profile/users/${userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({ fullName, email, role, password }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update user");
   }
 
   return response.json();

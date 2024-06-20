@@ -1,0 +1,55 @@
+/* Custom styles for the Dashboard component */
+
+/* General container styling */
+.dashboard-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px;
+  }
+  
+  /* Card styling */
+  .dashboard-container .card {
+    padding: 20px;
+  }
+  
+  /* Ensure the cards fit well within the container */
+  .dashboard-container .card .card-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Adjust margins and paddings for different screen sizes */
+  @media (max-width: 576px) {
+    .dashboard-container {
+      padding: 10px;
+    }
+    
+    .dashboard-container .card {
+      padding: 15px;
+    }
+  
+    .dashboard-container h2 {
+      font-size: 1.5rem;
+    }
+  
+    .dashboard-container .card-title {
+      font-size: 1.25rem;
+    }
+  
+    .dashboard-container .card-text {
+      font-size: 0.9rem;
+    }
+  
+    .dashboard-container .btn {
+      font-size: 0.9rem;
+      padding: 10px 15px;
+    }
+  }
+  
+  /* Additional styles can be added for larger screen sizes if needed */
+  @media (min-width: 1200px) {
+    .dashboard-container {
+      max-width: 900px;
+    }
+  }
+  

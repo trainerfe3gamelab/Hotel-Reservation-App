@@ -1,13 +1,16 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import * as apiClient from "../api-client";
 import { Link } from "react-router-dom";
 import { BsMap, BsBuilding } from "react-icons/bs";
-import { BiMoney, BiHotel, BiStar } from "react-icons/bi";
+import { BiMoney, BiHotel, BiStar, BiTrash } from "react-icons/bi";
+import Swal from "sweetalert2";
 import "./css/MyHotel.css";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const MyHotels = () => {
+  const queryClient = useQueryClient();
+
   const {
     data: hotelData,
     isLoading,
@@ -17,6 +20,39 @@ const MyHotels = () => {
       console.error("Error fetching hotels:", err);
     },
   });
+
+  const deleteHotelMutation = useMutation(
+    (hotelId) => apiClient.deleteHotel(hotelId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("fetchMyHotels");
+      },
+      onError: (err) => {
+        console.error("Error deleting hotel:", err);
+        Swal.fire("Error", "There was an error deleting the hotel.", "error");
+      },
+    }
+  );
+
+  const handleDelete = (hotelId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteHotelMutation.mutate(hotelId, {
+          onSuccess: () => {
+            Swal.fire("Deleted!", "Your hotel has been deleted.", "success");
+          },
+        });
+      }
+    });
+  };
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -28,11 +64,13 @@ const MyHotels = () => {
 
   if (!hotelData || hotelData.length === 0) {
     return (
-        <div className="center-container" style={{marginTop: "100px"}}>
-          <h1>No Hotel Found</h1>
-          <Link to="/add-hotel" className="btn-mid btn btn-primary">Add Hotel</Link>
-        </div>
-      );
+      <div className="center-container" style={{ marginTop: "50px" }}>
+        <h1>No Hotel Found</h1>
+        <Link to="/add-hotel" className="btn-mid btn btn-primary">
+          Add Hotel
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -76,13 +114,19 @@ const MyHotels = () => {
                     <span>{hotel.starRating} Stars</span>
                   </div>
                 </div>
-                <div className="mt-auto d-flex justify-content-end">
+                <div className="mt-auto d-flex justify-content-between">
                   <Link
                     to={`/edit-hotel/${hotel.hotelId}`}
                     className="btn btn-primary"
                   >
                     View Details
                   </Link>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleDelete(hotel.hotelId)}
+                  >
+                    <BiTrash /> Delete
+                  </button>
                 </div>
               </div>
             </div>

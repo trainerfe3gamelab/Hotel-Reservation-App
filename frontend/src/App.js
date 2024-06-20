@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import Layout from "./layouts/Layout";
-// import Register from "./pages/Register";
+import Register from "./pages/Register";
 import SignIn from "./pages/Signin";
 import AddHotel from "./pages/AddHotel";
 import MyHotels from "./pages/MyHotels";
@@ -19,6 +19,9 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAppContext } from "./contexts/AppContext";
 import MyProfile from "./pages/MyProfile";
+import Dashboard from "./pages/Dashboard";
+import ManageUsers from "./pages/ManageUsers";
+import ManageHotels from "./pages/ManageHotels";
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -48,6 +51,15 @@ function App() {
           element={
             <Layout>
               <SignIn />
+            </Layout>
+          }
+        />
+
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <Register />
             </Layout>
           }
         />
@@ -94,6 +106,36 @@ function App() {
                     <MyHotels />
                   </Layout>
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <Layout>
+                  <ProtectedRoute adminOnly={true}>
+                    <Dashboard />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
+            <Route
+              path="/manage-users"
+              element={
+                <Layout>
+                  <ProtectedRoute adminOnly={true}>
+                    <ManageUsers />
+                  </ProtectedRoute>
+                </Layout>
+              }
+            />
+            <Route
+              path="/manage-hotels"
+              element={
+                <Layout>
+                  <ProtectedRoute adminOnly={true}>
+                    <ManageHotels />
+                  </ProtectedRoute>
+                </Layout>
               }
             />
             <Route
