@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:7000";
+const API_BASE_URL = "api-msib-6-hotel-reservation-03.educalab.id";
 
 export const fetchCurrentUser = async () => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
