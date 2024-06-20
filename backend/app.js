@@ -31,10 +31,11 @@ app.use(
 );
 
 export const db = mysql.createConnection({
-  host: process.env.DATABASE_HOST,
-  user: process.env.DATABASE_USER,
-  password: process.env.DATABASE_PASSWORD,
-  database: process.env.DATABASE,
+  host: 'educalab.id',
+  user: 'CYOlBWORfFszeBVL',
+  password: 'tNkBOVpkaBVL3YFV',
+  database: 'h9etkS3gmQcM9Z33',
+  port: 3307,
 });
 
 db.connect((err) => {
