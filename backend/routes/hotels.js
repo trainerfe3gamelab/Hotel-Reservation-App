@@ -15,7 +15,7 @@ const router = express.Router();
 
 const pool = mysql.createPool({
   host: "educalab.id",
-  user: "	CYOlBWORfFszeBVL",
+  user: "CYOlBWORfFszeBVL",
   password: "tNkBOVpkaBVL3YFV",
   database: "h9etkS3gmQcM9Z33",
 });
