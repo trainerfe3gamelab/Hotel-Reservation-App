@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.REACT_APP_API || "";
+const API_BASE_URL = "api-msib-6-hotel-reservation-03.educalab.id:3307";
 
 export const fetchCurrentUser = async () => {
   const response = await fetch(`${API_BASE_URL}/api/users/me`, {
