@@ -19,9 +19,13 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAppContext } from "./contexts/AppContext";
 import MyProfile from "./pages/MyProfile";
+<<<<<<< HEAD
 import Dashboard from "./pages/Dashboard";
 import ManageUsers from "./pages/ManageUsers";
 import ManageHotels from "./pages/ManageHotels";
+=======
+import Register from "./pages/register";
+>>>>>>> 00d3b5012fb04230ec5788b338f8e1e12c2385b3
 
 function App() {
   const { isLoggedIn } = useAppContext();
@@ -42,6 +46,14 @@ function App() {
           element={
             <Layout>
               <Search />
+            </Layout>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <Layout>
+              <Register />
             </Layout>
           }
         />

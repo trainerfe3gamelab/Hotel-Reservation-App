@@ -51,12 +51,11 @@ router.post(
       const imageFiles = req.files;
       const newHotel = req.body;
 
-
       const imageUrls = await uploadImages(imageFiles);
 
       newHotel.imageUrls = imageUrls;
       newHotel.lastUpdated = new Date();
-      newHotel.userId = req.userId; 
+      newHotel.userId = req.userId;
 
       const hotel = await Hotel.create(newHotel);
 
@@ -104,10 +103,6 @@ router.put(
       const hotelId = req.params.hotelId;
       const updatedHotel = req.body;
 
-      console.log("Hotel ID from URL:", hotelId);
-      console.log("Updated hotel data:", updatedHotel);
-      console.log("Received files:", req.files);
-
       if (!hotelId) {
         return res.status(400).json({ message: "Hotel ID is missing or undefined" });
       }
@@ -122,7 +117,6 @@ router.put(
       });
 
       if (!hotel) {
-        console.log("Hotel not found for ID:", hotelId);
         return res.status(404).json({ message: "Hotel not found" });
       }
 
@@ -135,7 +129,6 @@ router.put(
         imageUrls: allImageUrls,
       });
 
-      console.log("Updated hotel successfully:", hotel);
       res.status(200).json(hotel);
     } catch (error) {
       console.error("Error updating hotel:", error);
@@ -144,5 +137,28 @@ router.put(
   }
 );
 
+router.delete("/delete/:hotelId", verifyToken, async (req, res) => {
+  const hotelId = req.params.hotelId;
+
+  try {
+    const hotel = await Hotel.findOne({
+      where: {
+        hotelId: hotelId,
+        userId: req.userId,
+      },
+    });
+
+    if (!hotel) {
+      return res.status(404).json({ message: "Hotel not found or not authorized" });
+    }
+
+    await hotel.destroy();
+
+    res.status(200).json({ message: "Hotel deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting hotel:", error);
+    res.status(500).json({ message: "Something went wrong", error: error.message });
+  }
+});
 
 export default router;
